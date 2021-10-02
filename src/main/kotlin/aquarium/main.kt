@@ -19,4 +19,10 @@ fun buildAquarium() {
     myAquarium.height = 80
 
     println("Height: ${myAquarium.height}cm")
+
+    val smallAquarium = Aquarium(length = 20, width = 15, height = 30)
+
+    println("volume of small: ${smallAquarium.volume}")
+
+    val myAquarium2 = Aquarium(numberOfFish = 9)
 }
