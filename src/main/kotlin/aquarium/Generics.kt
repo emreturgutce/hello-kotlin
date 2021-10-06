@@ -28,11 +28,17 @@ class MyAquarium<out T: WaterSupply>(val waterSupply: T) {
     }
 }
 
+inline fun <reified R: WaterSupply> MyAquarium<*>.hasWaterSupplyOfType() = waterSupply is R
+
 interface Cleaner<in T: WaterSupply> {
     fun clean(waterSupply: T)
 }
 
 fun addItemTo(aquarium: MyAquarium<WaterSupply>) = println("item added")
+
+fun <T: WaterSupply> isWaterClean(aquarium: MyAquarium<T>) {
+    println("aquarium water is clean: ${aquarium.waterSupply.needsProcessed}")
+}
 
 fun genericExample() {
     val aquarium = MyAquarium(TapWater())
