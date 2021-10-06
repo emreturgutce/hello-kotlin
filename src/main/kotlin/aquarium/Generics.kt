@@ -1,21 +1,41 @@
 package aquarium
 
-class MyList<T> {
-    private val list: MutableList<T> = mutableListOf()
+// out generic => will only be returned not consumed
+// in generic => it can only be consumed never produced
+// special case => constructors can take out type as param
 
-    fun getItem(pos: Int): T {
-        return list[pos]
-    }
+fun main(args: Array<String>) {
+    genericExample()
+}
 
-    fun addItem(item: T): Int {
-        list.add(item)
-        return list.size - 1
+open class WaterSupply(var needsProcessed: Boolean)
+
+class TapWater : WaterSupply(true) {
+    fun addChemicalCleaners() = apply { needsProcessed = true }
+}
+
+class FishStoreWater : WaterSupply(false)
+
+class LakeWater : WaterSupply(true) {
+    fun filter() = apply { needsProcessed = false }
+}
+
+class MyAquarium<out T: WaterSupply>(val waterSupply: T) {
+    fun addWater() {
+        check(!waterSupply.needsProcessed) { "water supply needs processed" }
+
+        println("adding water from $waterSupply")
     }
 }
 
-fun main() {
-    val myStrList = MyList<String>()
+interface Cleaner<in T: WaterSupply> {
+    fun clean(waterSupply: T)
+}
 
-    val idx = myStrList.addItem("Emre")
-    println(myStrList.getItem(idx))
+fun addItemTo(aquarium: MyAquarium<WaterSupply>) = println("item added")
+
+fun genericExample() {
+    val aquarium = MyAquarium(TapWater())
+
+    addItemTo(aquarium)
 }
